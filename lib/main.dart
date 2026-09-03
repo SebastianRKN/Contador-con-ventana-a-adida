@@ -55,6 +55,39 @@ class CounterClicksApp extends StatelessWidget {
   }
 }
 
+class ImageViewerPage extends StatelessWidget {
+  const ImageViewerPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final transformationController = TransformationController();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Imagen'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          tooltip: 'Volver a la aplicación',
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.zoom_out_map_rounded),
+            tooltip: 'Restablecer zoom',
+            onPressed: () => transformationController.value = Matrix4.identity(),
+          ),
+        ],
+      ),
+      body: InteractiveViewer(
+        transformationController: transformationController,
+        minScale: 0.5,
+        maxScale: 4,
+        child: Center(child: Image.asset('assets/gta.png.webp')),
+      ),
+    );
+  }
+}
+
 class CounterPage extends StatefulWidget {
   const CounterPage({super.key});
 
@@ -220,6 +253,16 @@ class _CounterPageState extends State<CounterPage>
                             ),
                             SizedBox(height: s['restartSpace']),
                             _RestartButton(onPressed: restart, width: s['restartWidth']!),
+                            const SizedBox(height: 16),
+                            OutlinedButton.icon(
+                              onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => const ImageViewerPage(),
+                                ),
+                              ),
+                              icon: const Icon(Icons.image_rounded),
+                              label: const Text('ABRIR IMAGEN'),
+                            ),
                             SizedBox(height: s['statsSpace']),
                             _Stats(session: session, best: best, counter: counter),
                             const SizedBox(height: 10),
